@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=3 uid="uid://cccx2bths7iga"]
+
+[ext_resource type="Script" uid="uid://bdntp7kgw4xo4" path="res://scripts/Barrier.cs" id="1_dsiq3"]
+[ext_resource type="Texture2D" uid="uid://bfojkdxxlqc4c" path="res://FlappyBirdAssets/Imagens/pipe-red.png" id="2_31k00"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xgbjb"]
+size = Vector2(89, 206.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sgkb4"]
+size = Vector2(89, 579)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ytjxq"]
+size = Vector2(58, 133)
+
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("bottomBarrierSprite")]
+script = ExtResource("1_dsiq3")
+bottomBarrierSprite = NodePath("StaticBody2D2/NinePatchRect2")
+groundHeight = 789.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(4, -65)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(39.5, 102.75)
+shape = SubResource("RectangleShape2D_xgbjb")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="StaticBody2D"]
+texture_filter = 1
+offset_left = -5.0
+offset_right = 85.0
+offset_bottom = 22.0
+texture = ExtResource("2_31k00")
+region_rect = Rect2(3.74226, 1.86683, 44.4462, 24.4502)
+axis_stretch_vertical = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="StaticBody2D"]
+texture_filter = 1
+offset_left = -5.0
+offset_top = 22.0
+offset_right = 85.0
+offset_bottom = 204.0
+texture = ExtResource("2_31k00")
+region_rect = Rect2(3.39524, 24.5598, 44.898, 295.44)
+axis_stretch_vertical = 1
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(22, -194)
+rotation = 3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(-22.5, 295.5)
+shape = SubResource("RectangleShape2D_sgkb4")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="StaticBody2D2"]
+texture_filter = 1
+offset_left = -67.0
+offset_top = 6.0
+offset_right = 22.0
+offset_bottom = 28.0
+texture = ExtResource("2_31k00")
+region_rect = Rect2(3.74226, 1.86683, 44.4462, 24.4502)
+axis_stretch_vertical = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="StaticBody2D2"]
+texture_filter = 1
+offset_left = -67.0
+offset_top = 28.0
+offset_right = 21.0
+offset_bottom = 584.0
+texture = ExtResource("2_31k00")
+region_rect = Rect2(3.39524, 24.5598, 44.898, 295.44)
+axis_stretch_vertical = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(3, -103)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(69, -29)
+shape = SubResource("RectangleShape2D_ytjxq")
