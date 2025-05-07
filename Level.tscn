@@ -173,11 +173,14 @@ size = Vector2(480.5, 7)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "currentScene", "currentScoreLabel", "highScoreLabel")]
 script = ExtResource("1_4eo0i")
 barrierScene = ExtResource("2_86ljf")
 spawnHeightRange = Vector2(300, 550)
 player = NodePath("../Player")
+currentScene = NodePath("..")
+currentScoreLabel = NodePath("../CanvasLayer/CurrentScore")
+highScoreLabel = NodePath("../CanvasLayer/HighScore")
 
 [node name="Parallax2D" type="ParallaxBackground" parent="."]
 
@@ -233,6 +236,8 @@ position = Vector2(517, 286)
 collision_layer = 4
 collision_mask = 3
 lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 2
 script = ExtResource("1_t7iv1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
@@ -257,3 +262,40 @@ shape = SubResource("RectangleShape2D_wkftn")
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 position = Vector2(32, -249)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CurrentScoreLabel" type="RichTextLabel" parent="CanvasLayer"]
+modulate = Color(0, 0, 0, 1)
+offset_left = 4.0
+offset_top = 8.0
+offset_right = 184.0
+offset_bottom = 44.0
+text = "Pontuação Atual:"
+
+[node name="CurrentScore" type="RichTextLabel" parent="CanvasLayer"]
+modulate = Color(0, 0, 0, 1)
+offset_left = 145.0
+offset_top = 8.0
+offset_right = 273.0
+offset_bottom = 48.0
+text = "0"
+
+[node name="HighScoreLabel" type="RichTextLabel" parent="CanvasLayer"]
+modulate = Color(0, 0, 0, 1)
+offset_left = 859.0
+offset_top = 6.0
+offset_right = 1039.0
+offset_bottom = 42.0
+text = "Maior Pontuação:
+"
+
+[node name="HighScore" type="RichTextLabel" parent="CanvasLayer"]
+modulate = Color(0, 0, 0, 1)
+offset_left = 1000.0
+offset_top = 6.0
+offset_right = 1128.0
+offset_bottom = 46.0
+text = "0"
+
+[connection signal="body_entered" from="Player" to="Player" method="OnBodyEntered"]

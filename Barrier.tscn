@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cccx2bths7iga"]
+[gd_scene load_steps=7 format=3 uid="uid://cccx2bths7iga"]
 
 [ext_resource type="Script" uid="uid://bdntp7kgw4xo4" path="res://scripts/Barrier.cs" id="1_dsiq3"]
 [ext_resource type="Texture2D" uid="uid://bfojkdxxlqc4c" path="res://FlappyBirdAssets/Imagens/pipe-red.png" id="2_31k00"]
+[ext_resource type="Script" uid="uid://d3f4ipnjof6b7" path="res://scripts/PointScorer.cs" id="3_31k00"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xgbjb"]
 size = Vector2(89, 462.5)
@@ -10,7 +11,7 @@ size = Vector2(89, 462.5)
 size = Vector2(89, 579)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ytjxq"]
-size = Vector2(58, 133)
+size = Vector2(58, 147.25)
 
 [node name="Node2D" type="Node2D" node_paths=PackedStringArray("bottomBarrierSprite")]
 script = ExtResource("1_dsiq3")
@@ -44,7 +45,7 @@ region_rect = Rect2(3.39524, 24.5598, 44.898, 295.44)
 axis_stretch_vertical = 1
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
-position = Vector2(22, -194)
+position = Vector2(20, -208)
 rotation = 3.14159
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
@@ -73,7 +74,11 @@ axis_stretch_vertical = 1
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(3, -103)
+collision_mask = 4
+script = ExtResource("3_31k00")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(69, -29)
+position = Vector2(72, -37.375)
 shape = SubResource("RectangleShape2D_ytjxq")
+
+[connection signal="body_exited" from="Area2D" to="Area2D" method="OnBodyExit"]
