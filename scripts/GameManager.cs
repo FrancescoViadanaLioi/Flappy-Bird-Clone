@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 public partial class GameManager : Node
 {
@@ -29,8 +30,8 @@ public partial class GameManager : Node
 	private float lastPlayersX = 0f;   // Última posição do jogador (para calcular a movimentação)
 	private float playersXTally = 0f;   // Acumulador da distância percorrida pelo jogador
 	private int score = 0;              // Pontuação atual
-	private int highScore = 0;          // Recorde de pontuação
-	private string path;                // Caminho do arquivo onde o recorde é salvo
+	private List<int> highScores = new List<int>();  // Lista para armazenar os 5 melhores scores
+	private string path;                // Caminho do arquivo onde os scores são salvos
 
 	// Método chamado quando o nó é iniciado (primeira vez que a cena é carregada)
 	public override void _Ready()
@@ -41,19 +42,31 @@ public partial class GameManager : Node
 		string data;
 		path = Path.Join(ProjectSettings.GlobalizePath("user://highscore.txt"));
 
-		// Tenta carregar o recorde salvo
-		if(!File.Exists(path)) return;  // Se o arquivo não existir, não faz nada
+		// Tenta carregar os scores salvos
+		if (!File.Exists(path)) return;  // Se o arquivo não existir, não faz nada
 		data = File.ReadAllText(path);
 		try
 		{
-			// Tenta ler o recorde e converte para inteiro
-			int.TryParse(data, out highScore);
-			highScoreLabel.Text = highScore.ToString();  // Atualiza o label do recorde
+			var scoreLines = data.Split("\n");
+			foreach (var line in scoreLines)
+			{
+				if (int.TryParse(line.Trim(), out int parsedScore))
+				{
+					highScores.Add(parsedScore);
+				}
+			}
+			highScores.Sort((a, b) => b.CompareTo(a));  // Ordena os scores
+			if (highScores.Count > 5)
+			{
+				highScores = highScores.Take(5).ToList();  // Garante que temos apenas 5 scores
+			}
 		}
 		catch (System.Exception)
 		{
 			// Caso ocorra algum erro ao ler o arquivo, nada é feito
 		}
+
+		UpdateHighScoresLabel();  // Atualiza a exibição dos scores
 	}
 
 	// Método chamado a cada frame, processa a lógica do jogo
@@ -64,7 +77,7 @@ public partial class GameManager : Node
 		lastPlayersX = player.Position.X;
 
 		// Quando o jogador percorre a distância necessária, gera uma nova barreira
-		if(playersXTally >= gapBetweenBarriers)
+		if (playersXTally >= gapBetweenBarriers)
 		{
 			playersXTally = 0f;  // Reseta o acumulador de distância
 
@@ -81,10 +94,19 @@ public partial class GameManager : Node
 	// Método chamado para recarregar a cena (reiniciar o jogo)
 	public void Reload()
 	{
-		// Verifica se a pontuação atual é maior que o recorde e salva, caso positivo
-		if (score > highScore)
+		// Verifica se a pontuação atual é maior que algum dos 5 melhores scores
+		if (highScores.Count < 5 || score > highScores.Last())
 		{
-			File.WriteAllText(path, score.ToString());  // Salva a nova pontuação
+			highScores.Add(score);
+			highScores.Sort((a, b) => b.CompareTo(a));  // Ordena a lista
+
+			if (highScores.Count > 5)
+			{
+				highScores.RemoveAt(highScores.Count - 1);  // Mantém apenas os 5 melhores
+			}
+
+			// Salva os 5 melhores scores no arquivo
+			File.WriteAllText(path, string.Join("\n", highScores));
 		}
 
 		// Recarrega a cena atual (reinicia o jogo)
@@ -96,5 +118,18 @@ public partial class GameManager : Node
 	{
 		score++;  // Incrementa a pontuação
 		currentScoreLabel.Text = score.ToString();  // Atualiza o label com a pontuação atual
+	}
+
+	// Atualiza o label com o ranking dos 5 melhores scores
+	public void UpdateHighScoresLabel()
+	{
+		// Limpa o texto atual do label
+		highScoreLabel.Text = "";
+
+		// Exibe os 5 melhores scores
+		for (int i = 0; i < highScores.Count; i++)
+		{
+			highScoreLabel.Text += $"{i + 1}º: {highScores[i]}\n";
+		}
 	}
 }

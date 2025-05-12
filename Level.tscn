@@ -283,19 +283,23 @@ text = "0"
 
 [node name="HighScoreLabel" type="RichTextLabel" parent="CanvasLayer"]
 modulate = Color(0, 0, 0, 1)
-offset_left = 859.0
-offset_top = 6.0
-offset_right = 1039.0
-offset_bottom = 42.0
+offset_left = 729.0
+offset_top = 3.0
+offset_right = 909.0
+offset_bottom = 39.0
 text = "Maior Pontuação:
 "
 
 [node name="HighScore" type="RichTextLabel" parent="CanvasLayer"]
 modulate = Color(0, 0, 0, 1)
-offset_left = 1000.0
-offset_top = 6.0
-offset_right = 1128.0
-offset_bottom = 46.0
-text = "0"
+offset_left = 880.0
+offset_top = 2.0
+offset_right = 1008.0
+offset_bottom = 121.0
+text = "1°: 0
+2°: 0
+3°: 0
+4°: 0
+5°: 0"
 
 [connection signal="body_entered" from="Player" to="Player" method="OnBodyEntered"]
